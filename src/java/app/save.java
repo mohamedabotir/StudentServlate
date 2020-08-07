@@ -7,6 +7,8 @@ package app;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,22 +32,8 @@ public class save extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet save</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet save at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+    
+  
 
     
     /**
@@ -64,9 +52,27 @@ public class save extends HttpServlet {
         String password=request.getParameter("password");
         String email=request.getParameter("email");
         String country=request.getParameter("country");
-        out.println("name:"+name+"  password:"+password+"  email:"+email+"  country:"+country);
-        RequestDispatcher r=request.getRequestDispatcher("search");
-        r.forward(request, response);
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(save.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        student o=new student();
+        o.setName(name);
+        o.setPassword(password);
+        o.setEmail(email);
+        o.setCountry(country);
+        DB save=new DB();
+       int num= save.save(o);
+       if(num>0)
+       {
+RequestDispatcher r=request.getRequestDispatcher("index.html");
+r.include(request, response);
+out.println("Successful Add");
+
+       }
+       else
+           System.out.println("Can't Save Error 101");
     }
 
     /**
