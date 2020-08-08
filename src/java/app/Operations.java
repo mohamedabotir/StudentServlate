@@ -12,5 +12,6 @@ package app;
 public interface Operations {
  int save(student o);
  int update(student o);
- void delete(student o);
+ int delete(int o);
+ int login(student o);
 }

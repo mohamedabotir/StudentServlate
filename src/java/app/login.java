@@ -7,9 +7,6 @@ package app;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -23,9 +20,29 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Threading
  */
-@WebServlet(name = "update", urlPatterns = {"/update"})
-public class update extends HttpServlet {
+@WebServlet(name = "login", urlPatterns = {"/login"})
+public class login extends HttpServlet {
+private static String email;
+        private static String password;
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public static String getEmail() {
+        return email;
+    }
+
+   
+    public static String getPassword() {
+        return password;
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,16 +60,16 @@ public class update extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet update</title>");            
+            out.println("<title>Servlet login</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet update at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet login at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -64,35 +81,29 @@ public class update extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       PrintWriter out=response.getWriter();
-       String name=request.getParameter("name");
-        String email=request.getParameter("email");
-         String region=request.getParameter("country");
-          String password=request.getParameter("password");
-          
+        PrintWriter out=response.getWriter();
+         email=request.getParameter("email");
+        password=request.getParameter("password");
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(update.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(save.class.getName()).log(Level.SEVERE, null, ex);
         }
-        student o=new student();
-        SimpleDateFormat    formate=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-     Date    dtsub=new Date();
-               o.setLog(formate.format(dtsub));
-               o.setName(name);
-               o.setCountry(region);
-               o.setEmail(email);
-               o.setPassword(password);
-        DB data=new DB();
-        int status=data.update(o);
-        if(status>0)
-        {
-        RequestDispatcher disp=request.getRequestDispatcher("update.html");
-        disp.include(request, response);
-        out.println("Successful Update");
-        }
-        else
-        out.println("Can't Update Some Thing gone wrong!");
+        student o=new  student();
+        o.setEmail(email);
+        o.setPassword(password);
+        DB data=new  DB();
+   int status= data.login(o);
+   if(status>0)
+   {
+       RequestDispatcher rq=request.getRequestDispatcher("register.html");
+   rq.forward(request, response);
+   }
+   else{
+        RequestDispatcher rq=request.getRequestDispatcher("login.html");
+   rq.include(request, response);
+   out.println("Error");
+   }
     }
 
     /**

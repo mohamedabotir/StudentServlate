@@ -5,6 +5,8 @@
  */
 package app;
 
+import static app.login.getEmail;
+import static app.login.getPassword;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -24,7 +26,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "insert", urlPatterns = {"/insert"})
 public class insert extends HttpServlet {
-
+private String email;
+private String password;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,6 +37,12 @@ public class insert extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    void get(student l){
+    String e=l.getEmail();
+    String p=l.getPassword();
+    email=e;
+    password=p;
+    }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -65,6 +74,7 @@ public class insert extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter print=response.getWriter();
+
         String name=request.getParameter("name");
          String password=request.getParameter("password");
           String email=request.getParameter("email");

@@ -1,136 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-<!doctype html>
-<html lang="ar">
-  <head>
-   <!-- <meta charset="utf-8">-->
-   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Jekyll v4.0.1">
-    <title>Starter Template · Bootstrap</title>
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+}
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
 
-    <!-- Bootstrap core CSS -->
-<link href="css/bootstrap.min.css" rel="stylesheet">
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
 
-    <!-- Favicons -->
-<link rel="apple-touch-icon" href="/docs/4.5/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-<link rel="icon" href="/docs/4.5/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="/docs/4.5/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-<link rel="manifest" href="/docs/4.5/assets/img/favicons/manifest.json">
-<link rel="mask-icon" href="/docs/4.5/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
-<link rel="icon" href="/docs/4.5/assets/img/favicons/favicon.ico">
-<meta name="msapplication-config" content="/docs/4.5/assets/img/favicons/browserconfig.xml">
-<meta name="theme-color" content="#563d7c">
+.dropdown .dropbtn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: background;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
 
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
 
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
 
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
-    <!-- Custom styles for this template -->
-    <link href="starter-template.css" rel="stylesheet">
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand" href="#">THF Production</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
 
-  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="update.html">Update <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-        <div class="dropdown-menu" aria-labelledby="dropdown01">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-    </ul>
-      <form class="form-inline my-2 my-lg-0" action="search" method="get">
-      <input class="form-control mr-sm-2" type="text" name="name" placeholder="Search" aria-label="Search">
-      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-    </form>
-  </div>
-</nav>
+.dropdown-content a:hover {
+  background-color: #fff;
+}
 
-<main role="main" class="container">
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+</style>
+</head>
+<body>
 
-  <div class="starter-template">
-    <h1>InsertInformation</h1>
-    <p class="lead">This page Only For Applicants to Our Internship<br> For any issue Contact us Ifo.applies@cu.com</p>
-  
-  </div>
-<form  action="save" method="post"> 
-          Name<br><input class="form-control" id="exampleSelectVendor" type="text" name="name"><br>
-          Password<br><input class="form-control" id="exampleSelectVendor" type="password" name="password"><br>
-          Email<br><input class="form-control" id="exampleSelectVendor" type="text" name="email"><br>
-          <!--Country<br><input type="text" name="contury">-->
-           <select  class="form-control" id="exampleSelectVendor" name="country">
-<option  selected="selected">Gharbia</option>
-<option  value="Alexandria">Alexandria	</option>
-<option  value="Ismailia">Ismailia</option>
-<option  value="Kafr El Sheikh">Kafr El Sheikh</option>
-<option  value="Aswan">Aswan</option>
-<option  value="Asyut">Asyut</option>
-<option  value="Luxor">Luxor</option>
-<option  value="Elwady Elgaded">Elwady Elgaded</option>
-<option  value="North Sinai">North Sinai</option>
-<option  value="Beheira">Beheira</option>
-<option  value="Beni Suef">Beni Suef</option>
-<option  value="Port Said">Port Said</option>
-<option  value="Red Sea">Red Sea</option>
-<option  value="Giza">Giza</option>
-<option  value="South Sinai">South Sinai</option>
-<option  value="Damietta">Damietta</option>
-<option  value="Dakahlia">Dakahlia</option>
-<option  value="Sohag">Sohag</option>
-<option  value="Suez">Suez</option>
-<option  value="Sharqia">Sharqia</option>
-<option  value="Gharbia">Gharbia</option>
-<option  value="Faiyum">Faiyum</option>
-<option  value="Cairo">Cairo</option>
-<option  value="Qalyubia">Qalyubia</option>
-<option  value="Qena">Qena</option>
-<option  value="Matruh">Matruh</option>
-<option  value="Monufia">Monufia</option>
-<option  value="Minya">Minya</option>
-
-                        </select>
-          <input type="submit" value ="Insert">
-          
-        </form> <br>
+<div class="navbar">
     
-</main><!-- /.container -->
-<div class="container">
-        <a href="viewstudent" class="btn btn-info" role="button">ViewStudent</a>
+  <a href="login.html">Login</a>
+  <a href="register.html">Register</a>
+  <div class="dropdown">
+    <button class="dropbtn">More
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Donate</a>
     </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-      <script>window.jQuery || document.write('<script src="/docs/4.5/assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="/docs/4.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd" crossorigin="anonymous"></script></body>
+  </div> 
+</div>
 
+<h3>Hello Client THF</h3>
+<p>We thanks you to your trust</p>
+
+</body>
 </html>

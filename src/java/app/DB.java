@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,10 +42,14 @@ public class DB implements Operations{
 
     @Override
     public int save(student o) {
+    SimpleDateFormat    formate=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+     Date    dtsub=new Date();
+
         DB c=new DB();
         int exc=0;
         String sql1="select * from account where email='"+o.getEmail()+"'";
-        String sql="insert into account (name,password,email,region) values(?,?,?,?)";
+        String sql2="insert into account ";
+        String sql="insert into account (name,password,email,region,adds) values(?,?,?,?,?)";
         Connection co=null;
         PreparedStatement stmp=null;
         Statement st;
@@ -63,6 +69,7 @@ public class DB implements Operations{
             stmp.setString(2, o.getPassword());
             stmp.setString(3, o.getEmail());
             stmp.setString(4, o.getCountry());
+            stmp.setString(5, o.getLog());
            
             exc=stmp.executeUpdate();
             stmp.close();
@@ -90,7 +97,7 @@ public class DB implements Operations{
     public int update(student o) {
         DB c=new DB();
         int exc=0;
-        String sql="update account set name=?,region=? where email=?&&password=?";
+        String sql="update account set name=?,region=?,lmodified=? where email=?&&password=?";
         Connection co=null;
         PreparedStatement stmp=null;
         try {
@@ -98,8 +105,9 @@ public class DB implements Operations{
             stmp=co.prepareStatement(sql);
             stmp.setString(1, o.getName());
             stmp.setString(2, o.getCountry());  
-            stmp.setString(4, o.getPassword());
-            stmp.setString(3, o.getEmail());
+            stmp.setString(5, o.getPassword());
+            stmp.setString(4, o.getEmail());
+            stmp.setString(3, o.getLog());
           
            
             exc=stmp.executeUpdate();
@@ -122,7 +130,76 @@ public class DB implements Operations{
     }
 
     @Override
-    public void delete(student o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int delete(int id) {
+        DB c=new DB();
+      int exc=0;
+      String sql="delete from account where id=?"; 
+      PreparedStatement stmp;
+      Connection con;
+        try {
+            con=c.getConnection();
+            stmp=con.prepareStatement(sql);
+            stmp.setInt(1,id);
+            exc=stmp.executeUpdate();
+            stmp.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      return exc;
     }
+
+    @Override
+    public int login(student o) {
+       
+String sql="select * from account";
+Statement st=null ;
+int exc = 0;
+Connection co = null;
+SimpleDateFormat    formate=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+     Date    dtsub=new Date();
+        try {
+            co=getConnection();
+            st=co.createStatement();
+         ResultSet rs=  st.executeQuery(sql);
+            while(rs.next())
+            {
+            String email=rs.getString("email");
+            String pass=rs.getString("password");
+            if(email.equals("")&&pass.equals(""))
+                break;
+            if(email.equals(o.getEmail())&&pass.equals(o.getPassword()))
+            {
+            exc=1;
+            break;
+            
+            }
+            else
+                exc=0;
+            }
+              
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+        if(co!=null)
+        {
+            try {
+                st.close();
+                co.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
+        }
+        }
+            
+            return exc;
+        } 
+       
+        
+        
+        
+        
+
+    
 }
