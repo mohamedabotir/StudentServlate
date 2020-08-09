@@ -5,6 +5,7 @@
  */
 package app;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -54,6 +55,7 @@ public class DB implements Operations{
         PreparedStatement stmp=null;
         Statement st;
         ResultSet r;
+        logs log=new logs();  
         int count=0;
         try {
             co=c.getConnection();
@@ -64,7 +66,8 @@ public class DB implements Operations{
             r.close();
             st.close();
             if(count==0)
-            {stmp=co.prepareStatement(sql);
+            {
+            stmp=co.prepareStatement(sql);
             stmp.setString(1, o.getName());
             stmp.setString(2, o.getPassword());
             stmp.setString(3, o.getEmail());
@@ -72,6 +75,7 @@ public class DB implements Operations{
             stmp.setString(5, o.getLog());
            
             exc=stmp.executeUpdate();
+            log.Write("Logs add Name:"+o.getName()+" Email:"+o.getEmail()+" "+formate.format(dtsub));
             stmp.close();
             }
             else{
@@ -80,7 +84,7 @@ public class DB implements Operations{
             
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        }  finally{
         if(stmp!=null)
            try {
                stmp.close();
@@ -153,13 +157,15 @@ public class DB implements Operations{
        
 String sql="select * from account";
 Statement st=null ;
+Statement st1=null;
 int exc = 0;
 Connection co = null;
 SimpleDateFormat    formate=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
      Date    dtsub=new Date();
         try {
             co=getConnection();
-            st=co.createStatement();
+            st1=st=co.createStatement();
+            
          ResultSet rs=  st.executeQuery(sql);
             while(rs.next())
             {
@@ -169,7 +175,9 @@ SimpleDateFormat    formate=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 break;
             if(email.equals(o.getEmail())&&pass.equals(o.getPassword()))
             {
+                
             exc=1;
+            st1.executeQuery("update from account set llogin='"+formate.format(dtsub)+"' where email='"+email+"'&&password='"+pass+"'");
             break;
             
             }
