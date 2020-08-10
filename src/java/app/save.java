@@ -73,7 +73,9 @@ public class save extends HttpServlet {
        int num= save.save(o);
        if(num>=0)
        {
+            
 out.println("Successful Add");
+
 
        }
        else

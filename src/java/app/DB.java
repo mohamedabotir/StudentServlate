@@ -13,7 +13,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,9 +25,9 @@ import java.util.logging.Logger;
  *
  * @author Threading
  */
-public class DB implements Operations{
-    private int port;
-    private String servername,username,password,db;
+public class DB <T>implements Operations{
+    private final int port;
+    private final String servername,username,password,db;
     DB(){
     this.db="web";
     this.port=3307;
@@ -85,7 +88,7 @@ public class DB implements Operations{
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }  finally{
-        if(stmp!=null)
+        if(co!=null)
            try {
                stmp.close();
                co.close();
@@ -116,11 +119,11 @@ public class DB implements Operations{
            
             exc=stmp.executeUpdate();
           
-            stmp.close();
+            
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-        if(stmp!=null)
+        if(co!=null)
            try {
                stmp.close();
                co.close();
@@ -138,19 +141,27 @@ public class DB implements Operations{
         DB c=new DB();
       int exc=0;
       String sql="delete from account where id=?"; 
-      PreparedStatement stmp;
-      Connection con;
+      PreparedStatement stmp=null;
+      Connection co=null;
         try {
-            con=c.getConnection();
-            stmp=con.prepareStatement(sql);
+            co=c.getConnection();
+            stmp=co.prepareStatement(sql);
             stmp.setInt(1,id);
             exc=stmp.executeUpdate();
             stmp.close();
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
-      return exc;
-    }
+        finally{
+        if(co!=null)
+           try {
+               stmp.close();
+               co.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+     
+    } return exc;}
 
     @Override
     public int login(student o) {
@@ -162,11 +173,12 @@ int exc = 0;
 Connection co = null;
 SimpleDateFormat    formate=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
      Date    dtsub=new Date();
+     ResultSet rs=null;
         try {
             co=getConnection();
             st1=st=co.createStatement();
             
-         ResultSet rs=  st.executeQuery(sql);
+         rs=  st.executeQuery(sql);
             while(rs.next())
             {
             String email=rs.getString("email");
@@ -177,7 +189,7 @@ SimpleDateFormat    formate=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             {
                 
             exc=1;
-            st1.executeQuery("update from account set llogin='"+formate.format(dtsub)+"' where email='"+email+"'&&password='"+pass+"'");
+            st1.executeUpdate("update  account set llogin='"+formate.format(dtsub)+"' where email='"+email+"'&&password='"+pass+"'");
             break;
             
             }
@@ -194,6 +206,7 @@ SimpleDateFormat    formate=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             try {
                 st.close();
                 co.close();
+                rs.close();
             } catch (SQLException ex) {
                 Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -204,10 +217,124 @@ SimpleDateFormat    formate=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             return exc;
         } 
        
-        
-        
-        
-        
+        student getOne(int id){
+            student Student =new student();
+        Connection co=null;
+        PreparedStatement stmp=null;
+        String sql="select * from account where id=?";
+        ResultSet rs=null;
+        try {
+            co=getConnection();
+            stmp=co.prepareStatement(sql);
+            stmp.setInt(1,id);
+            rs=stmp.executeQuery();
+            if(rs.next()){
+                Student.setId(rs.getInt(1));
+                Student.setName(rs.getString(2));
+                Student.setPassword(rs.getString(3));
+                Student.setEmail(rs.getString(4));
+                Student.setCountry(rs.getString(rs.getString(5)));
 
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+        if(co!=null)
+        {
+            try {
+                stmp.close();
+                co.close(); 
+                rs.close();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+        }
+        }
+        return Student;
+        } 
+        
+     public   List<student>getAll(){
+         DB c=new DB();
+        student Student=new student();
+        List<student>list=new ArrayList<student>();
+        Connection co=null;
+        PreparedStatement stmp=null;
+        String sql="select * from account";
+        ResultSet rs=null;
+        try {
+            co=c.getConnection();
+            stmp=co.prepareStatement(sql);
+            rs=stmp.executeQuery();
+            while(rs.next()){
+                Student.setId(rs.getInt(1));
+                Student.setName(rs.getString(2));
+                Student.setPassword(rs.getString(3));
+                Student.setEmail(rs.getString(4));
+                Student.setCountry(rs.getString(5));
+                list.add(Student);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+        if(co!=null)
+        {
+            try {
+                stmp.close();
+                co.close(); 
+                rs.close();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+        }
+        }
+        return list;
+        }
+        
+ public    DataStructure<student>get() {
+         DB c=new DB();
+         
+         
+        student Student=new student();
+        DataStructure<student> list=new DataStructure<student> ();
+        Connection co=null;
+        Statement stmp=null;
+        String sql="select * from account";
+        ResultSet rs=null;
+        try {
+            co=c.getConnection();
+            stmp=co.createStatement();
+            rs=stmp.executeQuery(sql);
+            while(rs.next()){
+                Student.setId(rs.getInt("id"));
+                Student.setName(rs.getString("name"));
+                Student.setEmail(rs.getString("email"));
+                Student.setCountry(rs.getString("region"));
+                list.push(Student);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+        if(co!=null)
+        {
+            try {
+                stmp.close();
+                co.close(); 
+                rs.close();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+        }
+        }
+        return list;
+        } 
     
 }

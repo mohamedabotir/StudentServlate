@@ -10,7 +10,7 @@ package app;
  * @author Threading
  */
 public class student {
-  private  String id;
+  private  int id;
  private   String name,email,password,country,log;
 
     public void setLog(String log) {
@@ -21,7 +21,7 @@ public class student {
         return log;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -37,7 +37,7 @@ public class student {
         return password;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
