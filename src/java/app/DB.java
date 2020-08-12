@@ -296,12 +296,12 @@ SimpleDateFormat    formate=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         return list;
         }
         
- public    DataStructure<student>get() {
+ public    ArrayList<student>get() {
          DB c=new DB();
          
          
         student Student=new student();
-        DataStructure<student> list=new DataStructure<student> ();
+        ArrayList<student> list=new ArrayList<student> ();
         Connection co=null;
         Statement stmp=null;
         String sql="select * from account";
@@ -315,7 +315,7 @@ SimpleDateFormat    formate=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Student.setName(rs.getString("name"));
                 Student.setEmail(rs.getString("email"));
                 Student.setCountry(rs.getString("region"));
-                list.push(Student);
+                list.add(Student);
             }
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);

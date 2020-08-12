@@ -7,6 +7,10 @@ package app;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,29 +51,43 @@ public class getAll extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>ClientData</h1>");
-            try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(save.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            DB c=new DB();
-            DataStructure<student>list=c.get();
+           
             out.print("<table border=2 width=100%");
             out.print("<tr><th>ID</th><th>Name</th><th>Email</th><th>Region</th><th>Delete</th></tr>");
-          
-           for(int i=0;i<list.Size();i++)
-            {
-                student Student=list.get(i);
-            out.print("<tr><td>"+Student.getId()+"</td>"+"<td>"+Student.getName()+"</td>"+"<td>"+Student.getEmail()+"</td>"+"<td>"+Student.getCountry()+"</td>"+"<td>"+"<a href='delete?id="+Student.getId()+"'>edit</a></td>");
-            } out.print("</table>"); 
+          Connection con = null;
+            DB c=new DB();
+            PreparedStatement stmp = null;
+            ResultSet rs = null;
             try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+            con=c.getConnection();
+            stmp=con.prepareStatement("select * from account");
+            rs=stmp.executeQuery();
+            while(rs.next()){
+            out.print("<tr><td>"+rs.getInt("id")+"</td>"+"<td>"+rs.getString("name")+"</td>"+"<td>"+rs.getString("email")+"</td>"+"<td>"+rs.getString("region")+"</td>"+"<td>"+"<a href='delete?id="+rs.getInt("id")+"'>delete</a></td>");
+             
+            }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(save.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }   catch (SQLException ex) {
+                Logger.getLogger(getAll.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            finally{
+            if(con!=null)
+               
+                try { 
+                    stmp.close();
+                    rs.close();
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(getAll.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+           out.print("</table>"); 
             
             
-            out.println("<a href=\"viewstudent\" class=\"btn btn-info\" role=\"button\">ViewStudent</a>");
+            
+            out.println("<a href=\"getAll\" class=\"btn btn-info\" role=\"button\">ViewStudent</a>");out.println("<a href=\"index.html\" class=\"btn btn-info\" role=\"button\">Home</a>");
             out.println("</body>");
             out.println("</html>");
         }
