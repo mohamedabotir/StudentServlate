@@ -5,7 +5,7 @@
  */
 package app;
 
-import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,15 +15,17 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  *
  * @author Threading
+ * @param <T>
  */
 public class DB <T>implements Operations{
     private final int port;
@@ -68,6 +70,13 @@ public class DB <T>implements Operations{
                 count++;
             r.close();
             st.close();
+           if(Character.isDigit(o.getName().charAt(0)))
+           {
+           exc=-2;
+           }
+           else{
+            if(o.getEmail().contains("@")&&o.getEmail().contains(".com")){
+                
             if(count==0)
             {
             stmp=co.prepareStatement(sql);
@@ -77,20 +86,24 @@ public class DB <T>implements Operations{
             stmp.setString(4, o.getCountry());
             stmp.setString(5, o.getLog());
            
-            exc=stmp.executeUpdate();
+            stmp.executeUpdate();
+            exc=1;
             log.Write("Logs add Name:"+o.getName()+" Email:"+o.getEmail()+" "+formate.format(dtsub));
             stmp.close();
             }
             else{
             exc=-1;
+            }}else{
+            exc=0;
             }
+           }
             
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }  finally{
         if(co!=null)
            try {
-               stmp.close();
+               
                co.close();
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,7 +154,7 @@ public class DB <T>implements Operations{
         DB c=new DB();
       int exc=0;
       String sql="delete from account where id=?"; 
-      PreparedStatement stmp=null;
+      PreparedStatement stmp;
       Connection co=null;
         try {
             co=c.getConnection();
@@ -155,7 +168,6 @@ public class DB <T>implements Operations{
         finally{
         if(co!=null)
            try {
-               stmp.close();
                co.close();
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);

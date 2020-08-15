@@ -72,6 +72,8 @@ public class delete extends HttpServlet {
         int status=data.delete(Integer.parseInt(id));
         if(status>0){
         out.println("Successful Delete");
+        RequestDispatcher dis=request.getRequestDispatcher("getAll");
+        dis.forward(request, response);
         }
         else{
         RequestDispatcher dis=request.getRequestDispatcher("delete.html");

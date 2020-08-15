@@ -71,18 +71,28 @@ public class save extends HttpServlet {
         o.setCountry(country);
         DB save=new DB();
        int num= save.save(o);
-       if(num>=0)
+       if(num==1)
        {
             
 out.println("Successful Add");
 
 
        }
-       else
+       else if(num==0){
+       RequestDispatcher r=request.getRequestDispatcher("register.html");
+r.include(request, response);
+out.println("Email Invalid");
+       }
+       else if(num==-1)
        {RequestDispatcher r=request.getRequestDispatcher("register.html");
 r.include(request, response);
 out.println("This Account Already used");
 }
+       else if(num==-2){
+        RequestDispatcher r=request.getRequestDispatcher("register.html");
+r.include(request, response);
+out.println("Invalid name");
+       }
     }
 
     /**
